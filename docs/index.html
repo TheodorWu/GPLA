@@ -435,19 +435,11 @@ This contrastive model enables direct ranking of different language-trajectory p
       The high-level VLM is then updated using <strong>SimPO</strong> preference optimisation on these pairs, iteratively steering the model toward more grounded and semantically accurate sub-task descriptions.
     </p>
 
-    <!-- Figure 1 placeholder -->
+    <!-- Figure 1 -->
     <div class="figure">
       <img src="assets/GPLAOverview.png" alt="Method Overview" />
       <p class="figure-caption">
         <strong>Figure 1.</strong> We extend a regular VLA into a hierarchical VLA, then iteratively align the intermediate language and action outputs using a learned grounding model and preference-based optimisation.
-      </p>
-    </div>
-
-    <!-- Figure 2 placeholder -->
-    <div class="figure">
-      <img src="assets/GroundingModel.png" alt="Action-Conditioned Grounding Model" />
-      <p class="figure-caption">
-        <strong>Figure 2.</strong> The grounding model conditions SigLIP 2 visual features on encoded action trajectories through FiLM layers, aligning vision-action pairs with low-level instructions via contrastive loss.
       </p>
     </div>
   </section>
