@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GPLA – Grounded Preference-based Language-Action Alignment</title>
+  <title>GPLA - Grounded Preference-based Language-Action Alignment</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <style>
@@ -343,7 +343,7 @@
   <div class="links">
     <a class="pill primary" href="https://arxiv.org/abs/2604.05614" title="Link to paper">📄 Paper PDF</a>
     <a class="pill" href="https://github.com/TheodorWu/GPLA" title="Link to GitHub repo">⌨ Code</a>
-    <a class="pill" href="#bibtex">BibTeX</a>
+    <a class="pill" href="#bibtex">Cite</a>
   </div>
 </header>
 
@@ -353,14 +353,17 @@
   <section id="abstract">
     <h2>Abstract</h2>
     <div class="abstract-box">
-      Achieving robot transparency is a critical step toward effective human-robot collaboration.
-To be transparent, a robot's natural language communication must be consistent with its actions and explicitly grounded in the task and environment.
-Existing hierarchical Vision-Language-Action (VLA) models can generate language (e.g., through chain-of-thought) and low-level actions.
-However, current work does not consider explicit alignment between these modalities during training.
-To address this crucial gap, we propose a novel training framework that explicitly grounds hierarchical VLA sub-task descriptions with respect to the visual observation and action space.
+      <p>Achieving robot transparency is a critical step toward effective human-robot collaboration.
+To be transparent, a robot's natural language communication must be consistent with its actions and explicitly grounded in the task and environment.</p>
+
+<p>Existing hierarchical Vision-Language-Action (VLA) models can generate language (e.g., through chain-of-thought) and low-level actions.
+However, current work does not consider explicit alignment between these modalities during training.</p>
+
+<p>To address this crucial gap, we propose a novel training framework that explicitly grounds hierarchical VLA sub-task descriptions with respect to the visual observation and action space.
 Our framework uses a contrastive model to assess the alignment between generated language and corresponding action trajectories.
-This contrastive model enables direct ranking of different language-trajectory pairs based on their alignment, allowing us to refine the grounding of our hierarchical VLA through offline preference learning.
-We apply our framework to the LanguageTable dataset, a benchmark dataset of human language-annotated trajectories, and provide critical insights into multimodal grounding representations, all while establishing a strong baseline that achieves performance comparable to fully supervised fine-tuning and minimizing the need for costly data annotations.
+This contrastive model enables direct ranking of different language-trajectory pairs based on their alignment, allowing us to refine the grounding of our hierarchical VLA through offline preference learning.</p>
+
+<p>We apply our framework to the LanguageTable dataset, a benchmark dataset of human language-annotated trajectories, and provide critical insights into multimodal grounding representations, all while establishing a strong baseline that achieves performance comparable to fully supervised fine-tuning and minimizing the need for costly data annotations.</p>
     </div>
   </section>
 
@@ -387,7 +390,7 @@ We apply our framework to the LanguageTable dataset, a benchmark dataset of huma
 
     <!-- Figure 2 placeholder -->
     <div class="figure">
-      <img src="assets/ActionConditionedGroundingModel.png" alt="Action-Conditioned Grounding Model" />
+      <img src="assets/GroundingModel.png" alt="Action-Conditioned Grounding Model" />
       <p class="figure-caption">
         <strong>Figure 2.</strong> The grounding model conditions SigLIP 2 visual features on encoded action trajectories through FiLM layers, aligning vision-action pairs with low-level instructions via contrastive loss.
       </p>
