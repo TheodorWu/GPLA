@@ -1,0 +1,5 @@
+project: Dev-Transparency-Preference
+entity: wulff
+log_frequency: 10 # Set to 0 or negative to remove printing to stdout
+table_batches_per_epoch: 10
+log_scheduler: True

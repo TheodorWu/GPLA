@@ -1,0 +1,5 @@
+active: True
+name: cosine_annealing
+kwargs:
+  T_max: 50000
+  eta_min_factor: 0.1

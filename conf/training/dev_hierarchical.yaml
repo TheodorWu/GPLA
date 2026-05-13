@@ -1,0 +1,25 @@
+defaults:
+  - peft: inactive
+  - optimizer: adam
+  - scheduler: inactive
+  - quantization: inactive
+
+seed: 42
+epochs: 2
+# Training scheme
+strategy: hierarchical_sft
+mode: full # options: full or backbone
+# Loss
+optimizer_step_freq: 2
+batch_size: 2
+clip_grad_norm: False
+enforce_caption_uniqueness: True
+
+# Early Stopping
+stop_train_after: 2
+stop_val_after: 2
+stop_test_after: 2
+
+device: gpu
+autocast: True
+

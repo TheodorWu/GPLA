@@ -1,0 +1,27 @@
+defaults:
+  - peft: inactive
+  - optimizer: adam
+  - scheduler: inactive
+  - quantization: inactive
+
+seed: 42
+epochs: 0
+# Training scheme
+strategy: SFT
+separate_lang_action_loss: True
+enforce_caption_uniqueness: True
+lang_loss_weight: 1.0
+action_loss_weight: 1.0
+# Loss
+dpo:
+  beta: 0.1
+  label_smoothing: 0.0
+optimizer_step_freq: 2
+batch_size: 2
+# Early Stopping
+stop_train_after: 2
+stop_val_after: 2
+stop_test_after: 2
+
+device: gpu
+autocast: True

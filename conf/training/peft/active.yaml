@@ -1,0 +1,8 @@
+active: True
+kwargs:
+  r: 32
+  target_modules: all-linear
+  lora_alpha: 16
+  lora_dropout: 0.05
+  bias: none
+  task_type: CAUSAL_LM # SEQ_2_SEQ_LM

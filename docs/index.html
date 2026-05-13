@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GPLA – Grounded Preference-based Language-Action Alignment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink:       #0d0d0f;
+      --ink-soft:  #3a3a42;
+      --paper:     #f5f2eb;
+      --paper-alt: #edeae0;
+      --accent:    #c0392b;
+      --accent2:   #2c3e6b;
+      --rule:      #c8c4b8;
+      --mono:      'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: .025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      padding: 6rem 2rem 5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .venue {
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.4rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.12;
+      color: var(--ink);
+      max-width: 720px;
+      margin-bottom: 2rem;
+    }
+
+    .authors {
+      font-size: .9rem;
+      color: var(--ink-soft);
+      margin-bottom: .4rem;
+    }
+    .authors strong { color: var(--ink); font-weight: 700; }
+
+    .affiliation {
+      font-family: var(--mono);
+      font-size: .72rem;
+      color: var(--ink-soft);
+      margin-bottom: 2.4rem;
+    }
+
+    /* ── LINK PILLS ── */
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .7rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .45rem 1.1rem;
+      border: 1.5px solid var(--ink);
+      font-family: var(--mono);
+      font-size: .75rem;
+      letter-spacing: .05em;
+      text-decoration: none;
+      color: var(--ink);
+      transition: background .18s, color .18s;
+    }
+    .pill:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+    .pill.primary {
+      background: var(--accent2);
+      border-color: var(--accent2);
+      color: #fff;
+    }
+    .pill.primary:hover {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    section {
+      padding: 3.5rem 0 0;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 3.5rem;
+    }
+    section:last-child { border-bottom: none; }
+
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.55rem;
+      margin-bottom: 1.2rem;
+      color: var(--ink);
+    }
+
+    p { margin-bottom: 1rem; color: var(--ink-soft); }
+    p:last-child { margin-bottom: 0; }
+    p strong { color: var(--ink); font-weight: 700; }
+
+    /* ── ABSTRACT BOX ── */
+    .abstract-box {
+      background: var(--paper-alt);
+      border-left: 3px solid var(--accent2);
+      padding: 1.6rem 1.8rem;
+      font-size: .95rem;
+      line-height: 1.8;
+    }
+
+    /* ── FIGURE PLACEHOLDER ── */
+    .figure {
+      margin: 2rem 0;
+    }
+    .figure-img {
+      width: 100%;
+      background: var(--paper-alt);
+      border: 1px dashed var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      font-size: .75rem;
+      letter-spacing: .06em;
+    }
+    .figure img { width: 100%; display: block; }
+    .figure-caption {
+      font-size: .8rem;
+      color: var(--ink-soft);
+      font-family: var(--mono);
+      margin-top: .6rem;
+      line-height: 1.5;
+    }
+    .figure-caption strong { color: var(--accent2); }
+
+    /* ── CONTRIBUTIONS LIST ── */
+    .contrib-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: .5rem;
+    }
+    .contrib-list li {
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      gap: .6rem;
+      align-items: start;
+    }
+    .contrib-num {
+      font-family: var(--mono);
+      font-size: .8rem;
+      color: var(--accent);
+      font-weight: 500;
+      padding-top: .15rem;
+    }
+    .contrib-text { color: var(--ink-soft); font-size: .95rem; }
+    .contrib-text strong { color: var(--ink); }
+
+    /* ── RESULTS GRID ── */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      margin: 2rem 0;
+    }
+    .result-cell {
+      background: var(--paper);
+      padding: 1.4rem 1.6rem;
+    }
+    .result-label {
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: .35rem;
+    }
+    .result-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.7rem;
+      color: var(--accent2);
+      line-height: 1;
+    }
+    .result-note {
+      font-size: .78rem;
+      color: var(--ink-soft);
+      margin-top: .3rem;
+    }
+
+    /* ── METHOD PIPELINE ── */
+    .pipeline {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .pipe-step {
+      background: var(--paper-alt);
+      border: 1.5px solid var(--rule);
+      padding: .8rem 1.1rem;
+      font-size: .78rem;
+      font-family: var(--mono);
+      text-align: center;
+      color: var(--ink);
+      flex: 1;
+      min-width: 100px;
+    }
+    .pipe-step.highlight {
+      background: var(--accent2);
+      border-color: var(--accent2);
+      color: #fff;
+    }
+    .pipe-arrow {
+      font-size: 1rem;
+      color: var(--rule);
+      padding: 0 .3rem;
+      flex-shrink: 0;
+    }
+
+    /* ── BIB ── */
+    .bib-box {
+      background: var(--paper-alt);
+      border: 1px solid var(--rule);
+      padding: 1.2rem 1.4rem;
+      font-family: var(--mono);
+      font-size: .72rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      white-space: pre-wrap;
+      word-break: break-all;
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute;
+      top: .7rem;
+      right: .7rem;
+      background: transparent;
+      border: 1px solid var(--rule);
+      padding: .25rem .65rem;
+      font-family: var(--mono);
+      font-size: .65rem;
+      cursor: pointer;
+      color: var(--ink-soft);
+      transition: all .15s;
+    }
+    .copy-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-family: var(--mono);
+      font-size: .7rem;
+      color: var(--rule);
+      border-top: 1px solid var(--rule);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    header > * {
+      opacity: 0;
+      animation: fadeUp .6s forwards;
+    }
+    header > *:nth-child(1) { animation-delay: .05s; }
+    header > *:nth-child(2) { animation-delay: .15s; }
+    header > *:nth-child(3) { animation-delay: .22s; }
+    header > *:nth-child(4) { animation-delay: .29s; }
+    header > *:nth-child(5) { animation-delay: .36s; }
+
+    @media (max-width: 600px) {
+      .results-grid { grid-template-columns: 1fr; }
+      .pipeline { flex-direction: column; gap: .4rem; }
+      .pipe-arrow { transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="venue">University of Manchester &nbsp;·&nbsp; 2025</div>
+
+  <h1>Grounding Hierarchical Vision-Language-Action Models Through Explicit Language-Action Alignment</h1>
+
+  <div class="authors">
+    <strong>Theodor Wulff*</strong>, Federico Tavella, Rahul Singh Maharjan, Manith Adikari, Angelo Cangelosi
+  </div>
+  <div class="affiliation">* Corresponding author &nbsp;|&nbsp; theodor.wulff@manchester.ac.uk</div>
+
+  <div class="links">
+    <a class="pill primary" href="https://arxiv.org/abs/2604.05614" title="Link to paper">📄 Paper PDF</a>
+    <a class="pill" href="https://github.com/TheodorWu/GPLA" title="Link to GitHub repo">⌨ Code</a>
+    <a class="pill" href="#bibtex">BibTeX</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ABSTRACT -->
+  <section id="abstract">
+    <h2>Abstract</h2>
+    <div class="abstract-box">
+      Achieving robot transparency is a critical step toward effective human-robot collaboration.
+To be transparent, a robot's natural language communication must be consistent with its actions and explicitly grounded in the task and environment.
+Existing hierarchical Vision-Language-Action (VLA) models can generate language (e.g., through chain-of-thought) and low-level actions.
+However, current work does not consider explicit alignment between these modalities during training.
+To address this crucial gap, we propose a novel training framework that explicitly grounds hierarchical VLA sub-task descriptions with respect to the visual observation and action space.
+Our framework uses a contrastive model to assess the alignment between generated language and corresponding action trajectories.
+This contrastive model enables direct ranking of different language-trajectory pairs based on their alignment, allowing us to refine the grounding of our hierarchical VLA through offline preference learning.
+We apply our framework to the LanguageTable dataset, a benchmark dataset of human language-annotated trajectories, and provide critical insights into multimodal grounding representations, all while establishing a strong baseline that achieves performance comparable to fully supervised fine-tuning and minimizing the need for costly data annotations.
+    </div>
+  </section>
+
+  <!-- METHOD OVERVIEW -->
+  <section id="method">
+    <h2>Method Overview</h2>
+    <p>
+      GPLA extends a standard VLA into a <strong>hierarchical VLA</strong> by integrating a high-level VLM (Gemma 3) that decomposes high-level instructions into executable low-level sub-tasks, paired with a low-level VLA (SmolVLA) that generates action trajectories.
+    </p>
+    <p>
+      A separately trained <strong>Action-Conditioned Grounding Model</strong> extends SigLIP 2 by conditioning visual features on encoded action trajectories via FiLM layers. This model scores the alignment of each language-action pair using a symmetric InfoNCE loss, enabling preference pairs to be automatically constructed without additional human annotation.
+    </p>
+    <p>
+      The high-level VLM is then updated using <strong>SimPO</strong> preference optimisation on these pairs, iteratively steering the model toward more grounded and semantically accurate sub-task descriptions.
+    </p>
+
+    <!-- Figure 1 placeholder -->
+    <div class="figure">
+      <img src="assets/GPLAOverview.png" alt="Method Overview" />
+      <p class="figure-caption">
+        <strong>Figure 1.</strong> We extend a regular VLA into a hierarchical VLA, then iteratively align the intermediate language and action outputs using a learned grounding model and preference-based optimisation.
+      </p>
+    </div>
+
+    <!-- Figure 2 placeholder -->
+    <div class="figure">
+      <img src="assets/ActionConditionedGroundingModel.png" alt="Action-Conditioned Grounding Model" />
+      <p class="figure-caption">
+        <strong>Figure 2.</strong> The grounding model conditions SigLIP 2 visual features on encoded action trajectories through FiLM layers, aligning vision-action pairs with low-level instructions via contrastive loss.
+      </p>
+    </div>
+  </section>
+
+  <!-- CONTRIBUTIONS -->
+  <section id="contributions">
+    <h2>Contributions</h2>
+    <ul class="contrib-list">
+      <li>
+        <span class="contrib-num">01</span>
+        <span class="contrib-text">We propose <strong>GPLA</strong>, a novel preference-learning framework that explicitly grounds the intermediate language outputs of hierarchical VLAs with visual observations and actions, potentially eliminating the need for expensive annotation of sub-task labels.</span>
+      </li>
+      <li>
+        <span class="contrib-num">02</span>
+        <span class="contrib-text">GPLA achieves <strong>performance comparable to fully supervised fine-tuning</strong> on the LanguageTable manipulation benchmark, while uniquely supporting low-data regimes.</span>
+      </li>
+      <li>
+        <span class="contrib-num">03</span>
+        <span class="contrib-text">Visual analysis of the embedding space shows that our <strong>action-conditioned grounding model</strong> improves cross-modal alignment, mapping action-vision and text inputs into overlapping embedding regions unlike standard CLIP or SigLIP 2.</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results">
+    <h2>Results</h2>
+    <!-- Qualitative Table -->
+    <div class="figure" style="margin-top:2.5rem;">
+      <p style="font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:1rem;">
+        Table 2 &nbsp;·&nbsp; Qualitative Examples on the LanguageTable Dataset
+      </p>
+      <div style="overflow-x:auto;">
+        <table class="qual-table">
+          <colgroup>
+            <col style="width:14%">
+            <col style="width:21.5%">
+            <col style="width:21.5%">
+            <col style="width:21.5%">
+            <col style="width:21.5%">
+          </colgroup>
+          <thead>
+            <tr>
+              <th></th>
+              <th><img src="assets/sample1.png" alt="Sample 1"></th>
+              <th><img src="assets/sample2.png" alt="Sample 2"></th>
+              <th><img src="assets/sample3.png" alt="Sample 3"></th>
+              <th><img src="assets/sample4.png" alt="Sample 4"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-divider">
+              <td class="row-label">High-level Instructions</td>
+              <td>make a "parallelogram" shape out of all the blocks</td>
+              <td>put all the blocks in the bottom left corner</td>
+              <td>put all the blocks in the center left</td>
+              <td>put all the blocks in a horizontal line on the bottom of the board</td>
+            </tr>
+            <tr>
+              <td class="row-label">Low-level Instructions (GT)</td>
+              <td>move the green star diagonal to the hexagon</td>
+              <td>move the blue blocks towards the bottom left</td>
+              <td>keep the yellow heart at the bottom right side of the green star</td>
+              <td>move the blue blocks towards the bottom left</td>
+            </tr>
+            <tr class="row-divider">
+              <td class="row-label model-supervised">Supervised</td>
+              <td class="model-supervised">move your arm towards the left below the yellow heart</td>
+              <td class="model-supervised">push the yellow hexagon into your hand</td>
+              <td class="model-supervised">set down the heart</td>
+              <td class="model-supervised">slide the blue cube slightly towards the left and the right of the blue triangle</td>
+            </tr>
+            <tr>
+              <td class="row-label model-gpla">GPLA (Action-Conditioned)</td>
+              <td class="model-gpla">place hexagon above square</td>
+              <td class="model-gpla">move your arm towards yellow star</td>
+              <td class="model-gpla">move your arm towards front of the board</td>
+              <td class="model-gpla">place your arm towards towards left side</td>
+            </tr>
+            <tr>
+              <td class="row-label model-combined">Supervised + GPLA (Action-Conditioned)</td>
+              <td class="model-combined">push the red circle diagonally to the triangle</td>
+              <td class="model-combined">move yellow hexagon into red star</td>
+              <td class="model-combined">drag red circle to the yellow hexagon</td>
+              <td class="model-combined">push blue cube diagonally above green circle</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- BIBTEX -->
+  <section id="bibtex">
+    <h2>BibTeX</h2>
+    <div class="bib-box" id="bib-content">@misc{wulff2026groundinghierarchicalvisionlanguageactionmodels,
+      title={Grounding Hierarchical Vision-Language-Action Models Through Explicit Language-Action Alignment},
+      author={Theodor Wulff and Federico Tavella and Rahul Singh Maharjan and Manith Adikari and Angelo Cangelosi},
+      year={2026},
+      eprint={2604.05614},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2604.05614},
+}</div>
+      <button class="copy-btn" onclick="copyBib()">Copy</button>
+  </section>
+
+  <!-- ACKNOWLEDGEMENTS -->
+  <section>
+    <h2>Acknowledgements</h2>
+    <p>
+      This work was funded by the EU and UKRI under Horizon Europe, MSCA grant agreement No 101072488 (TRAIL). The authors thank the Computational Shared Facility at the University of Manchester for providing the compute resources used to train all models.
+    </p>
+  </section>
+
+</main>
+
+<footer>
+  University of Manchester &nbsp;·&nbsp; 2025 &nbsp;·&nbsp; theodor.wulff@manchester.ac.uk
+</footer>
+
+<script>
+  function copyBib() {
+    const text = document.getElementById('bib-content').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1800);
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+processor:
+  prompt_template: "In: What action should the robot take to <task>?\nOut:"
+  answer_template: "In: What action should the robot take to <task>?\nOut: <action> <caption>"
+  bins: 256
+  min_action: -1.0
+  max_action: 1.0
+  max_length: 512 # maximum length of tokens
+  use_extra: true # Set to true if MiniVLA or other VLA iwth QWEN Backbone
+  predict_stop_token: true
+  action_first: true # if true, action tokens come before caption tokens
+vla:
+  id: high_level_vlm
+  # id: vla
+  # freeze: vision
+  # generation_kwargs:
+  #   temperature: 0.7
+  #   do_sample: true
+  #   top_p: 0.9
+    # top_k: 50
+clip:
+  # id: vision_action_grounded_clip
+  id: action_clip
+  checkpoint: null
+  dim: 128
+  target_vla: gr00t
+  projection_type: residual
+  custom_prompt_template: "<caption>" # add or remove <task> and <action> as needed
+  freeze: pretrained_encoders # pretrained_encoders, vision_encoder, language_encoder, or none
+  repeat_actions: 8 # number of times to repeat each action in the sequence
+  final_layer_norm: False # whether to apply layer norm after pooling
+  fusion_method: gated # attention, gated, mlp, hadamard
+  vector_fusion: true # single weight or vector product for gated fusion
+  num_cross_attention_layers: 4 # number of cross attention layers between vision and action
+  shared_projection: film # cross_attention or skip
+  pooling_method: mean
+  loss_type: contrastive
+  diversity_weight: 0.01
+  text_backbone: clip # clip, siglip2
+  vision_backbone: clip # dino, siglip2
+  use_siglip2: false
+  dino_version: v2
+  use_hard_negative_mining: true
+  hard_neg_weight: 0.5
+dtype: bfloat16

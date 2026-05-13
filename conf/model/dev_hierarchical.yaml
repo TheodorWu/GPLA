@@ -1,0 +1,58 @@
+processor:
+  prompt_template: "What action should the robot take to <task>?"
+  answer_template: "<caption>"
+  bins: 256
+  min_action: -1.0
+  max_action: 1.0
+  max_length: 512 # maximum length of tokens
+  use_extra: true # Set to true if MiniVLA or other VLA iwth QWEN Backbone
+  predict_stop_token: true
+
+vla:
+  id: hierarchical
+  freeze: vision
+
+  generation_kwargs:
+    temperature: 0.7
+    do_sample: true
+    top_p: 0.9
+    # top_k: 50
+
+  hierarchical_kwargs:
+    embedding_layer: 11
+
+  backbone_cfg:
+    tune_llm: false
+    tune_visual: false
+    select_layer: -1
+    reproject_vision: false
+    use_flash_attention: false
+    load_bf16: false
+    eagle_path: null
+    project_to_dim: null
+
+  action_head_cfg:
+    input_embedding_dim: 1536
+    backbone_embedding_dim: 2048
+    hidden_size: 1024
+    max_state_dim: 64
+    action_dim: 2
+    action_horizon: 8
+    num_inference_timesteps: 4
+
+    vl_self_attention_cfg:
+      attention_head_dim: 64
+      num_layers: 4
+      num_attention_heads: 16
+      positional_embeddings: null
+
+    diffusion_model_cfg:
+      attention_head_dim: 48
+      cross_attention_dim: 2048
+      num_attention_heads: 32
+      num_layers: 16
+      output_dim: 1024
+      final_dropout: true
+      positional_embeddings: null
+
+dtype: bfloat16

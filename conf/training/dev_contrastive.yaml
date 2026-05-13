@@ -1,0 +1,42 @@
+defaults:
+  - peft: inactive
+  - optimizer: adam
+  - scheduler: inactive
+  - quantization: inactive
+
+seed: 42
+epochs: 2
+# Training scheme
+strategy: contrastive
+# Loss
+optimizer_step_freq: 2
+batch_size: 32
+clip_grad_norm: True
+enforce_caption_uniqueness: True
+apply_augmentation: True
+
+# Early Stopping
+stop_train_after: 2
+stop_val_after: 2
+stop_test_after: 2
+
+device: gpu
+autocast: True
+
+optimizer:
+  lr_by_group:
+    text_encoder: 1e-5
+    vision_encoder: 1e-4
+    action_encoder: 1e-4
+    attention: 1e-4
+    logit_scale: 1e-3
+    fusion_weight: 1e-4
+    others: 1e-4
+
+contrastive_kwargs:
+  max_retrieval_samples: 100
+  retrieval_k_values:
+    - 1
+    - 5
+    - 10
+  retrieval_eval_batch_size: 2

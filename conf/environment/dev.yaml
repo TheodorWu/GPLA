@@ -1,0 +1,16 @@
+name: language_table
+action_dimension: 2
+kwargs:
+  tasks:
+    # - 000_put_the_red_and_green_blocks_t
+    # - 001_make_a_T_shape_out_of_all_t
+    - all
+  frames_per_episode: 3
+  horizon: 8 # only affects actions
+  buffer_size: 4
+  num_workers: 1
+  threshold: 0.02 # threshold for action
+  cutoff_type: single # full or single, if full, threshold requires all actions to be above threshold, if single, only one action needs to be above threshold
+  initial_buffer_size: 100
+  max_buffer_size: 1000
+  buffer_growth_factor: 1.5

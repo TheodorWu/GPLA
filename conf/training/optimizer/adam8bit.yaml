@@ -1,0 +1,11 @@
+name: adam8bit
+kwargs:
+  lr: 2e-5
+  betas:
+    - 0.9
+    - 0.999
+  eps: 1e-08
+  weight_decay: 0
+  amsgrad: false
+  optim_bits: 32
+  percentile_clipping: 5

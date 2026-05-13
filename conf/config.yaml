@@ -1,0 +1,11 @@
+defaults:
+  - model: dev
+  - environment: dev
+  - training: dev
+  - wandb: default
+  - _self_
+
+stage: dev
+visualization:
+  stop_after: 100
+  model: CLIP

@@ -1,0 +1,14 @@
+name: language_table
+action_dimension: 2
+kwargs:
+  tasks:
+    - all
+  frames_per_episode: 10
+  horizon: 8 # only affects actions
+  buffer_size: 200
+  num_workers: 4
+  threshold: 0.1 # threshold for action
+  cutoff_type: single # full or single, if full, threshold requires all actions to be above threshold, if single, only one action needs to be above threshold
+  initial_buffer_size: 200
+  max_buffer_size: 1000
+  buffer_growth_factor: 1.5

@@ -1,0 +1,6 @@
+active: True
+name: cosine_with_warmup
+kwargs:
+  T_max: 200000
+  eta_min_factor: 0.1
+  warmup_iters: 1000
