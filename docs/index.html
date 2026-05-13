@@ -293,9 +293,6 @@
       position: relative;
     }
     .copy-btn {
-      position: absolute;
-      top: .7rem;
-      right: .7rem;
       background: transparent;
       border: 1px solid var(--rule);
       padding: .25rem .65rem;
@@ -304,6 +301,7 @@
       cursor: pointer;
       color: var(--ink-soft);
       transition: all .15s;
+      margin-bottom: 0.4rem;
     }
     .copy-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
@@ -545,6 +543,7 @@ This contrastive model enables direct ranking of different language-trajectory p
   <!-- BIBTEX -->
   <section id="bibtex">
     <h2>BibTeX</h2>
+    <button class="copy-btn" onclick="copyBib()"><i class="fa-regular fa-copy"></i> Copy</button>
     <div class="bib-box" id="bib-content">@misc{wulff2026groundinghierarchicalvisionlanguageactionmodels,
       title={Grounding Hierarchical Vision-Language-Action Models Through Explicit Language-Action Alignment},
       author={Theodor Wulff and Federico Tavella and Rahul Singh Maharjan and Manith Adikari and Angelo Cangelosi},
@@ -554,7 +553,6 @@ This contrastive model enables direct ranking of different language-trajectory p
       primaryClass={cs.RO},
       url={https://arxiv.org/abs/2604.05614},
 }</div>
-      <button class="copy-btn" onclick="copyBib()">Copy</button>
   </section>
 
   <!-- ACKNOWLEDGEMENTS -->
@@ -576,8 +574,8 @@ This contrastive model enables direct ranking of different language-trajectory p
     const text = document.getElementById('bib-content').innerText;
     navigator.clipboard.writeText(text).then(() => {
       const btn = document.querySelector('.copy-btn');
-      btn.textContent = 'Copied!';
-      setTimeout(() => btn.textContent = 'Copy', 1800);
+      btn.innerHTML = '<i class="fa-regular fa-check"></i> Copied!';
+      setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy', 1800);
     });
   }
 </script>
