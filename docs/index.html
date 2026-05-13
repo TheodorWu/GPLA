@@ -321,6 +321,61 @@
     header > *:nth-child(4) { animation-delay: .29s; }
     header > *:nth-child(5) { animation-delay: .36s; }
 
+    /* ── QUALITATIVE TABLE ── */
+    .qual-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--paper);
+    }
+    .qual-table thead th {
+      padding: 1rem;
+      border-bottom: 2px solid var(--ink);
+      background: var(--paper-alt);
+      font-weight: 400;
+      font-size: .85rem;
+    }
+    .qual-table tbody tr {
+      border-bottom: 1.5px solid var(--rule);
+    }
+    .qual-table tbody tr.row-divider {
+      border-bottom: 2px solid var(--ink-soft);
+    }
+    .qual-table td {
+      padding: 1.2rem;
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+    .qual-table .row-label {
+      font-family: var(--mono);
+      font-size: .75rem;
+      font-weight: 500;
+      color: var(--ink);
+      background: var(--paper-alt);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      width: 14%;
+      vertical-align: top;
+      padding: 1.2rem 1rem;
+    }
+    .qual-table .model-supervised {
+      color: #2c5aa0;
+      font-weight: 500;
+    }
+    .qual-table .model-gpla {
+      color: #d97706;
+      font-weight: 500;
+    }
+    .qual-table .model-combined {
+      color: #059669;
+      font-weight: 500;
+    }
+    .qual-table tbody tr:nth-child(odd) td:not(.row-label) {
+      background: rgba(245, 242, 235, 0.5);
+    }
+    .qual-table tbody tr:nth-child(even) td:not(.row-label) {
+      background: var(--paper);
+    }
+
     @media (max-width: 600px) {
       .results-grid { grid-template-columns: 1fr; }
       .pipeline { flex-direction: column; gap: .4rem; }
@@ -427,11 +482,11 @@ This contrastive model enables direct ranking of different language-trajectory p
       <div style="overflow-x:auto;">
         <table class="qual-table">
           <colgroup>
-            <col style="width:14%">
-            <col style="width:21.5%">
-            <col style="width:21.5%">
-            <col style="width:21.5%">
-            <col style="width:21.5%">
+            <col style="width:16%">
+            <col style="width:21%">
+            <col style="width:21%">
+            <col style="width:21%">
+            <col style="width:21%">
           </colgroup>
           <thead>
             <tr>
