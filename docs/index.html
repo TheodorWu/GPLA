@@ -48,7 +48,7 @@
     header {
       position: relative;
       padding: 6rem 2rem 5rem;
-      max-width: 900px;
+      max-width: 1120px;
       margin: 0 auto;
       border-bottom: 1px solid var(--rule);
     }
@@ -67,14 +67,20 @@
       font-size: clamp(2rem, 5vw, 3.4rem);
       line-height: 1.12;
       color: var(--ink);
-      max-width: 720px;
+      max-width: 860px;
       margin-bottom: 2rem;
     }
 
     .authors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 .35rem;
       font-size: .9rem;
       color: var(--ink-soft);
       margin-bottom: .4rem;
+    }
+    .authors strong {
+      white-space: nowrap;
     }
     .authors strong { color: var(--ink); font-weight: 700; }
 
@@ -126,7 +132,7 @@
 
     /* ── MAIN LAYOUT ── */
     main {
-      max-width: 900px;
+      max-width: 1120px;
       margin: 0 auto;
       padding: 0 2rem 6rem;
     }
